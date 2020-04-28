@@ -16,16 +16,19 @@ export default class AuthService {
   login() {
     const state = generateRandomString(16);
     localStorage.setItem("auth_state", state);
-
+  alert('XXXXXXXXXXXXXXXXXXX=>', config.spotifyClientId)
     let url = "https://accounts.spotify.com/authorize";
     url += "?response_type=token";
     url += "&client_id=" + encodeURIComponent(config.spotifyClientId);
     url += "&scope=" + encodeURIComponent(scopesArray.join(" "));
-    url += "redirect_uri=" + encodeURIComponent(config.spotifyRedirectUri);
-    url += "state=" + encodeURIComponent(state);
+    url += "&redirect_uri=" + encodeURIComponent(config.spotifyRedirectUri);
+    url += "&state=" + encodeURIComponent(state);
 
     window.location.href = url;
   }
+
+
+
 
   logout() {
     // Clear access token, id token and profile
@@ -82,5 +85,14 @@ export default class AuthService {
         this.setProfile(profile);
         return profile;
       })
+  }
+
+  setProfile(profile) {
+    localStorage.setItem("profile", JSON.stringify(profile));
+  }
+
+  getProfile() {
+    const profile = localStorage.getItem("profile");
+    return profile ? JSON.parse(localStorage.profile) : {};
   }
 }
